@@ -1,6 +1,6 @@
 # ParticleSwarmOptimization
 ## EXAMPLE CODE:
-```pythin
+```python
 def Problem5(inPut):
     x = inPut[0]
     y = inPut[1]
