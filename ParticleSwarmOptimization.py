@@ -1,11 +1,13 @@
 import numpy as np
 import random as rand
 import math
+import numpy as np 
+from matplotlib import pyplot as plt 
 
 class ParticleSwarmOptimization():
     
     def __init__(self, x_Lb, x_Ub, y_Lb, y_Ub, n, velocityRange, w, c1, c2, iterMax, func, cons):
-        print("__init__")
+#         print("__init__")
         self.x_Lb = x_Lb
         self.x_Ub = x_Ub
         self.y_Lb = y_Lb
@@ -25,6 +27,8 @@ class ParticleSwarmOptimization():
         self.pBestLocArray = np.ones((self.n,2))
         self.gBest = -float("inf")
         self.gBestLocArray = np.ones(2)
+        self.optSolution = -float("inf")
+        self.optSolutionArray = np.ones(2)
         
     def initialzation(self):
 #         print("initialzation===============")
@@ -62,6 +66,7 @@ class ParticleSwarmOptimization():
 #         print("pBestLocArray:\n", self.pBestLocArray)
     
     def determine_gBest_gBestLoc(self):
+        self.gBest = -float("inf")
 #         print("determine_gBest_gBestLoc===============")
         for i in range(self.n):
             if(self.fitnessArray[i] > self.gBest):
@@ -71,6 +76,12 @@ class ParticleSwarmOptimization():
                 
 #         print("gBest:", self.gBest)
 #         print("gBestLocArray:\n", self.gBestLocArray)
+
+    def determineSolution(self):
+        if(self.gBest > self.optSolution):
+            self.optSolution = self.gBest
+            self.optSolutionArray[0] = self.gBestLocArray[0]
+            self.optSolutionArray[1] = self.gBestLocArray[1]
     
     def calculateVelocities(self):
 #         print("calculateVelocities===============")
@@ -120,6 +131,8 @@ class ParticleSwarmOptimization():
 #         print("locationArray:\n", self.locationArray)
     
     def doRun(self):
+        gbest_Y = []
+        optSolution_Y = []
         self.initialzation()
         
         for gen in range(self.iterMax):
@@ -128,11 +141,23 @@ class ParticleSwarmOptimization():
             self.update_pBest_pBestLoc()
             self.determine_gBest_gBestLoc()
             print("gBest:", self.gBest)
+            self.determineSolution()
+            print("optSolution:", self.optSolution)
             self.calculateVelocities()
             self.damping()
             self.calculateLocations()
             self.repairLocations()
+            gbest_Y.append(self.gBest)
+            optSolution_Y.append(self.optSolution)
         
+        x = np.arange(1, self.iterMax + 1)
+        plt.figure(figsize=(15,5))
+        plt.title("ParticleSwarmOptimization Demo") 
+        plt.xlabel("Iter") 
+        plt.ylabel("optSolution") 
+        plt.plot(x, gbest_Y, color = 'red') 
+        plt.plot(x, optSolution_Y, color = 'blue') 
+        plt.show()
         print("===========ANS============")
-        print("gBest:", self.gBest)
-        print("gBestLocArray:\n", self.gBestLocArray)
+        print("optSolution:", self.optSolution)
+        print("optSolutionArray:\n", self.optSolutionArray)
