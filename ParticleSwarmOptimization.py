@@ -4,7 +4,7 @@ import math
 import numpy as np 
 from matplotlib import pyplot as plt 
 
-class ParticleSwarmOptimization():
+class ParticleSwarmOptimization:
     
     def __init__(self, x_Lb, x_Ub, y_Lb, y_Ub, n, velocityRange, w, c1, c2, iterMax, func, cons):
 #         print("__init__")
